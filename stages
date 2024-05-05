@@ -27,7 +27,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo "Performing security scan using OWASP ZAP"
-                // Use OWASP ZAP for security scanning
+                echo "Use OWASP ZAP for security scanning"
             }
         }
         
