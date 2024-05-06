@@ -1,64 +1,75 @@
 pipeline {
     agent any
+
     stages {
-        stage("Build") {
+        stage('Build') {
             steps {
-                echo "Building code using Maven..."
-                
+                echo "Building the code using Maven"
+                // Use Maven to compile and package the code
             }
         }
-        stage("Unit and Integration Tests") {
+
+        stage('Unit and Integration Tests') {
             steps {
-                echo "Running unit tests..."
-                
-                echo "Running integration tests..."
-                
+                echo "Running unit tests using JUnit"
+                echo "Running integration tests using Selenium"
+                // Use JUnit for unit tests and Selenium for integration tests
             }
         }
-        stage("Code Analysis") {
+
+        stage('Code Analysis') {
             steps {
-                echo "Running code analysis with SonarQube..."
-                
+                echo "Analyzing code using SonarQube"
+                // Integrate SonarQube for code analysis
             }
         }
-        stage("Security Scan") {
+
+        stage('Security Scan') {
             steps {
-                echo "Performing security scan with OWASP ZAP..."
-                
+                echo "Performing security scan using OWASP ZAP"
+                // Use OWASP ZAP for security scanning
             }
             post {
                 always {
-                    mail to: "ahad1@gmail.com",
-                    subject: "Security Scan Status Email",
-                    body: "successfully Security Scan log attached!"
+                    // Send email notification with logs attached
+                    mail(
+                        to: 'noumanali784@gmail.com',
+                        subject: 'Security Scan Status',
+                        body: 'Security scan completed with status: ' + currentBuild.result,
+                        //attachLog: true
+                    )
                 }
             }
         }
-        stage("Deploy to Staging") {
+        stage('Deploy to Staging') {
             steps {
-                echo "Deploying to staging server (AWS EC2 instance)..."
-                
+                echo "Deploying the application to a staging server (e.g., AWS EC2 instance)"
+                // Use Jenkins to deploy to staging, or use deployment tools like Ansible or Terraform
             }
         }
-        stage("Integration Tests on Staging") {
+
+        stage('Integration Tests on Staging') {
             steps {
-                echo "Running integration tests on staging environment..."
-                
+                echo "Running integration tests on the staging environment"
+                // Use Selenium or similar tools to run integration tests on staging
             }
             post {
                 always {
-                    mail to: "ahad1@gmail.com",
-                    subject: "Testing Status Email",
-                    body: "successfullytesting log attached!"
+                    // Send email notification with logs attached
+                    mail(
+                        to: 'noumanali784@gmail.com',
+                        subject: 'Security Scan Status',
+                        body: 'Security scan completed with status: ' + currentBuild.result,
+                        //attachLog: true
+                    )
                 }
             }
         }
-        stage("Deploy to Production") {
+        stage('Deploy to Production') {
             steps {
-                echo "Deploying to production server (AWS EC2 instance)..."
-                
+                echo "Deploying the application to a production server (e.g., AWS EC2 instance)"
+                // Use Jenkins to deploy to production, or use deployment tools like Ansible or Terraform
             }
-        }
-    }
-    
+        }
+    }
 }
