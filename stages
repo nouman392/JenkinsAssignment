@@ -70,6 +70,6 @@ pipeline {
                 echo "Deploying the application to a production server (e.g., AWS EC2 instance)"
                 // Use Jenkins to deploy to production, or use deployment tools like Ansible or Terraform
             }
-        }
+        }
     }
 }
