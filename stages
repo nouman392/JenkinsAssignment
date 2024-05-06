@@ -5,7 +5,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building the code using Maven"
-                // Use Maven to compile and package the code
+                mail to:"noumanali784@gmail.com",
+                subject:"building status email",
+                body:"building log attached"
             }
         }
         
