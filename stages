@@ -2,18 +2,20 @@ pipeline {
     agent any
     
     stages {
-        stage('notify') {
+        stage('Checkout') {
             steps {
-                // Checkout code from GitHub repository
                 git 'https://github.com/nouman392/JenkinsAssignment.git'
             }
         }
+        
         stage('Build') {
             steps {
                 echo "Building the code using Maven"
-                mail to:"noumanali784@gmail.com",
-                subject:"building status email",
-                body:"building log attached"
+                // Replace with Maven build command
+                sh 'mvn clean install'
+                mail to: 'noumanali784@gmail.com',
+                     subject: 'Build Status',
+                     body: 'Build completed successfully. Check logs for details.'
             }
         }
         
@@ -21,30 +23,32 @@ pipeline {
             steps {
                 echo "Running unit tests using JUnit"
                 echo "Running integration tests using Selenium"
-                echo "Use JUnit for unit tests and Selenium for integration tests"
+                // Replace with actual test execution commands
+                sh 'mvn test'
             }
         }
         
         stage('Code Analysis') {
             steps {
                 echo "Analyzing code using SonarQube"
-                echo "Integrate SonarQube for code analysis"
+                // Replace with SonarQube analysis command
+                sh 'mvn sonar:sonar'
             }
         }
         
         stage('Security Scan') {
             steps {
                 echo "Performing security scan using OWASP ZAP"
-                echo "Use OWASP ZAP for security scanning"
+                // Replace with OWASP ZAP scan command
+                sh 'owasp-zap-cli start'
             }
-              post {
+            post {
                 always {
-                    // Send email notification with logs attached
                     mail(
                         to: 'noumanali784@gmail.com',
                         subject: 'Security Scan Status',
                         body: 'Security scan completed with status: ' + currentBuild.result,
-                        //attachLog: true
+                        attachLog: true
                     )
                 }
             }
@@ -52,25 +56,29 @@ pipeline {
         
         stage('Deploy to Staging') {
             steps {
-                echo "Deploying the application to a staging server (e.g., AWS EC2 instance)"
-                // Use Jenkins to deploy to staging, or use deployment tools like Ansible or Terraform
+                echo "Deploying the application to a staging server"
+                // Replace with your deployment script
+                sh 'deploy_to_staging.sh'
             }
         }
         
         stage('Integration Tests on Staging') {
             steps {
                 echo "Running integration tests on the staging environment"
-                // Use Selenium or similar tools to run integration tests on staging
+                // Replace with actual test execution commands
+                sh 'run_integration_tests.sh'
             }
         }
         
         stage('Deploy to Production') {
             steps {
-                echo "Deploying the application to a production server (e.g., AWS EC2 instance)"
-                // Use Jenkins to deploy to production, or use deployment tools like Ansible or Terraform
+                echo "Deploying the application to a production server"
+                // Replace with your deployment script
+                sh 'deploy_to_production.sh'
             }
         }
     }
+    
     post {
         success {
             echo 'Pipeline completed successfully!'
@@ -79,17 +87,12 @@ pipeline {
             echo 'Pipeline failed!'
         }
         always {
-            // Always actions regardless of success or failure
-            // Notify the developers with an email
             mail(
                 to: 'noumanali784@gmail.com',
                 subject: 'Pipeline Status: ' + currentBuild.result,
                 body: 'The pipeline has finished with status: ' + currentBuild.result,
-                //attachLog: true
+                attachLog: true
             )
         }
     }
 }
-
-
-
