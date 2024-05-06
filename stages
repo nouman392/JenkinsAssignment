@@ -7,6 +7,7 @@ pipeline {
                 // Checkout code from GitHub repository
                 git 'https://github.com/nouman392/JenkinsAssignment.git'
             }
+        }
         stage('Build') {
             steps {
                 echo "Building the code using Maven"
@@ -89,3 +90,6 @@ pipeline {
         }
     }
 }
+
+
+
