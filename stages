@@ -2,6 +2,11 @@ pipeline {
     agent any
     
     stages {
+        stage('notify') {
+            steps {
+                // Checkout code from GitHub repository
+                git 'https://github.com/nouman392/JenkinsAssignment.git'
+            }
         stage('Build') {
             steps {
                 echo "Building the code using Maven"
@@ -31,6 +36,17 @@ pipeline {
                 echo "Performing security scan using OWASP ZAP"
                 echo "Use OWASP ZAP for security scanning"
             }
+              post {
+                always {
+                    // Send email notification with logs attached
+                    mail(
+                        to: 'noumanali784@gmail.com',
+                        subject: 'Security Scan Status',
+                        body: 'Security scan completed with status: ' + currentBuild.result,
+                        attachLog: true
+                    )
+                }
+            }
         }
         
         stage('Deploy to Staging') {
@@ -52,6 +68,24 @@ pipeline {
                 echo "Deploying the application to a production server (e.g., AWS EC2 instance)"
                 // Use Jenkins to deploy to production, or use deployment tools like Ansible or Terraform
             }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        always {
+            // Always actions regardless of success or failure
+            // Notify the developers with an email
+            mail(
+                to: 'noumanali784@gmail.com',
+                subject: 'Pipeline Status: ' + currentBuild.result,
+                body: 'The pipeline has finished with status: ' + currentBuild.result,
+                attachLog: true
+            )
         }
     }
 }
